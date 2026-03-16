@@ -2,7 +2,7 @@
 name: gitflow
 description: Automate GitHub issue and PR workflow — create issues for parked items, ideas, and cross-project bugs; suggest branching when editing on main; ensure PRs reference issues. Use when parking work, deferring a bug, noting an idea, writing a handoff doc, starting or finishing a unit of work, or checking project status.
 ---
-<!-- Version: 2026-03-14.1 -->
+<!-- Version: 2026-03-16.1 -->
 
 # GitHub Workflow Automation
 
@@ -70,6 +70,7 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
 2. **Suggest branch name** based on the work: `fix/<slug>`, `feat/<slug>`, or `chore/<slug>`
 3. **Confirm:** "Create branch `<name>` and open a PR?" — yes/no
 4. **Execute:**
+   - `git fetch origin` — ensure local refs are current before branching
    - `git checkout -b <branch-name>`
    - `git add <specific-files>` (not `git add .` or `git add -A`)
    - `git commit -m "<message>"` — message derived from PR title
@@ -82,9 +83,9 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
 
 1. **Detect:** on a feature branch, user signals work is complete
 2. **Check:** find the open PR for the current branch. Find related open issues.
-3. **Confirm:** "Merge PR? Strategy: squash (default) / merge / rebase?" and "This will close issue #N — correct?"
+3. **Confirm:** "Ready to merge PR #N (squash)? This will close issue #N." — yes/no. Only ask about strategy if the user explicitly requests merge or rebase.
 4. **Ensure** the PR body contains `Fixes rusty428/<scaffold-repo>#N` (full cross-repo syntax). Edit the PR body if needed before merging.
-5. **Execute:** `gh pr merge --squash` (or chosen strategy)
+5. **Execute:** `gh pr merge --squash` (unless user requested a different strategy)
 6. **Cleanup:** "Delete branch `<name>`?" — yes/no. If yes: `git checkout main && git pull && git branch -d <branch>`
 7. **Report:** confirm PR merged, issue closed, branch deleted
 
