@@ -39,10 +39,10 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
 
 ## Repo Conventions
 
-- **GitHub user:** `rusty428`
+- **GitHub user:** `<YOUR-GITHUB-USER>`
 - **Issues** go in scaffold repos (`<project>-project`) — project-level tracking
 - **PRs** go in component repos (where the code lives)
-- **Cross-repo close syntax:** always use `Fixes rusty428/<scaffold-repo>#N` (short `#N` only works same-repo)
+- **Cross-repo close syntax:** always use `Fixes <YOUR-GITHUB-USER>/<scaffold-repo>#N` (short `#N` only works same-repo)
 - **Branch naming:** `fix/<slug>`, `feat/<slug>`, or `chore/<slug>` — kebab-case
 
 ## Action: Create Issue
@@ -58,7 +58,7 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
 4. **Confirm:** present the title, label, and target repo. Ask yes/no.
 5. **Execute:**
    ```
-   gh issue create --repo rusty428/<repo> --label <label> --title "<title>" --body "<body>"
+   gh issue create --repo <YOUR-GITHUB-USER>/<repo> --label <label> --title "<title>" --body "<body>"
    ```
 6. **Report:** display the issue URL
 
@@ -76,7 +76,7 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
    - `git commit -m "<message>"` — message derived from PR title
    - `git push -u origin <branch-name>`
    - `gh pr create --title "<title>" --body "<body>"`
-5. **Link issues:** search for related open issues in the scaffold repo. If found, include `Fixes rusty428/<scaffold-repo>#N` in the PR body.
+5. **Link issues:** search for related open issues in the scaffold repo. If found, include `Fixes <YOUR-GITHUB-USER>/<scaffold-repo>#N` in the PR body.
 6. **Report:** display the PR URL
 
 ## Action: Close via PR
@@ -84,7 +84,7 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
 1. **Detect:** on a feature branch, user signals work is complete
 2. **Check:** find the open PR for the current branch. Find related open issues.
 3. **Confirm:** "Ready to merge PR #N (squash)? This will close issue #N." — yes/no. Only ask about strategy if the user explicitly requests merge or rebase.
-4. **Ensure** the PR body contains `Fixes rusty428/<scaffold-repo>#N` (full cross-repo syntax). Edit the PR body if needed before merging.
+4. **Ensure** the PR body contains `Fixes <YOUR-GITHUB-USER>/<scaffold-repo>#N` (full cross-repo syntax). Edit the PR body if needed before merging.
 5. **Execute:** `gh pr merge --squash` (unless user requested a different strategy)
 6. **Cleanup:** "Delete branch `<name>`?" — yes/no. If yes: `git checkout main && git pull && git branch -d <branch>`
 7. **Report:** confirm PR merged, issue closed, branch deleted
@@ -93,17 +93,17 @@ Before creating a label, check if it already exists: `gh label list --repo <repo
 
 1. **Query open issues** (gitflow labels only):
    ```
-   gh search issues --owner rusty428 --state open --label blocker
-   gh search issues --owner rusty428 --state open --label bug
-   gh search issues --owner rusty428 --state open --label parked
-   gh search issues --owner rusty428 --state open --label idea
+   gh search issues --owner <YOUR-GITHUB-USER> --state open --label blocker
+   gh search issues --owner <YOUR-GITHUB-USER> --state open --label bug
+   gh search issues --owner <YOUR-GITHUB-USER> --state open --label parked
+   gh search issues --owner <YOUR-GITHUB-USER> --state open --label idea
    ```
 2. **Query open PRs:**
    ```
-   gh search prs --owner rusty428 --state open
+   gh search prs --owner <YOUR-GITHUB-USER> --state open
    ```
 3. **Scope:** if invoked within a project, ask "This project only or all projects?"
-   - Current project: filter by `--repo rusty428/<project>-project`
+   - Current project: filter by `--repo <YOUR-GITHUB-USER>/<project>-project`
 4. **Present** as a grouped summary:
    - **Blockers** (count) — list titles and repos
    - **Bugs** (count) — list titles and repos
