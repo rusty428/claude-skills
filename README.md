@@ -4,7 +4,7 @@ A curated collection of Claude Code skills for software development workflows �
 
 ## What Are Claude Code Skills?
 
-Skills are markdown files with YAML frontmatter that Claude Code auto-discovers in your workspace. When you invoke a skill (via the Skill tool or `/skill-name`), Claude loads the instructions and follows them. Skills standardize repeatable workflows so you get consistent, high-quality output every time.
+Skills are markdown files with YAML frontmatter that Claude Code loads on demand. Place them in your `.claude/commands/` directory, and they become available as slash commands (e.g., `/createTodo`). Skills standardize repeatable workflows so you get consistent, high-quality output every time.
 
 ## Skills Included
 
@@ -39,31 +39,31 @@ Skills are markdown files with YAML frontmatter that Claude Code auto-discovers 
 ### Workflow
 | Skill | Purpose |
 |-------|---------|
+| **gitflow** | Automate GitHub issue and PR workflow — create issues, suggest branches, ensure PRs reference issues |
 | **troubleshooting** | Structured debugging protocol: observe, compare, collaborate, hypothesize, verify, implement |
 | **reviewProject** | Quick project context establishment at the start of a session |
 | **createLambda** | Scaffold a new Lambda function with handler + functions/ separation of concerns |
 
 ## Installation
 
-### Option 1: Clone into your workspace
+### Download individual skills (recommended)
+
+Download the skills you want directly into your project's `.claude/commands/` directory:
 
 ```bash
-cd ~/projects
-git clone git@github.com:rusty428/claude-skills.git my-skills
+mkdir -p .claude/commands
+curl -o .claude/commands/createTodo.md https://raw.githubusercontent.com/rusty428/claude-skills/main/createTodo.md
 ```
 
-Claude Code auto-discovers `.md` files with skill frontmatter in your workspace tree.
+Each `.md` file is self-contained — drop it in and it's available as a slash command.
 
-### Option 2: Copy individual skills
-
-Copy any `.md` file into your project or a directory within your Claude Code workspace. The skill becomes available immediately.
-
-### Option 3: Reference as a submodule
+### Clone the full repo
 
 ```bash
-cd ~/projects/my-project
-git submodule add git@github.com:rusty428/claude-skills.git skills
+git clone https://github.com/rusty428/claude-skills.git
 ```
+
+Then copy whichever skills you need into your project's `.claude/commands/` directory.
 
 ## Skill Format
 
@@ -94,12 +94,6 @@ These skills enforce precise technical writing throughout all generated document
 - **Active voice** — clear subject-verb-object structure showing who did what
 - **No hedge phrases** — "I think," "I believe," "in my opinion" are removed
 - **Substantiated benefits** — only claim improvements backed by evidence
-
-## Version History
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2026-03-08 | Initial release — 15 skills modernized from legacy prompt library |
 
 ## License
 
