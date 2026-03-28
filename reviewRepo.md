@@ -2,7 +2,7 @@
 name: reviewRepo
 description: Evaluate a third-party GitHub repo for adoption, extraction, or skipping — clone it locally, run a triage scan, then optionally dig deeper. Use when reviewing an external repo to decide if it fits our workflow.
 ---
-<!-- Version: 2026-03-28.2 -->
+<!-- Version: 2026-03-28.3 -->
 
 # Review Repo — Third-Party Evaluation
 
@@ -12,7 +12,7 @@ Evaluate a GitHub repo to answer: adopt it, extract useful parts, or skip it.
 
 `/reviewRepo <github-url>`
 
-Example: `/reviewRepo https://github.com/gsd-build/get-shit-done`
+Example: `/reviewRepo https://github.com/rusty428/claude-skills`
 
 ## Phase 1: Setup
 
@@ -20,8 +20,8 @@ Example: `/reviewRepo https://github.com/gsd-build/get-shit-done`
 
 Extract owner and repo name from the GitHub URL.
 
-- `https://github.com/gsd-build/get-shit-done` → owner: `gsd-build`, repo: `get-shit-done`
-- Clone directory: `~/workspace/tmp/<owner>-<repo>` (e.g., `~/workspace/tmp/gsd-build-get-shit-done`)
+- `https://github.com/rusty428/claude-skills` → owner: `rusty428`, repo: `claude-skills`
+- Clone directory: `~/workspace/tmp/<owner>-<repo>` (e.g., `~/workspace/tmp/rusty428-claude-skills`)
 
 ### 1.2 Clone or Reuse
 
