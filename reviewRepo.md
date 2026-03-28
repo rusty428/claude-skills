@@ -2,7 +2,7 @@
 name: reviewRepo
 description: Evaluate a third-party GitHub repo for adoption, extraction, or skipping — clone it locally, run a triage scan, then optionally dig deeper. Use when reviewing an external repo to decide if it fits our workflow.
 ---
-<!-- Version: 2026-03-28.1 -->
+<!-- Version: 2026-03-28.2 -->
 
 # Review Repo — Third-Party Evaluation
 
@@ -198,3 +198,4 @@ When the review is complete, ask:
 4. **In-session only** — no written reports or artifacts saved. Findings are conversational.
 5. **Context first** — read `~/.claude/CLAUDE.md` before starting the scan so comparisons against "our workflow" are informed.
 6. **One repo at a time** — this skill reviews a single repo per invocation.
+7. **No piped commands** — never use `|` in Bash calls. Use the Grep tool for searching, the Read tool for reading files, and write to temp files if you need to combine output. Run one operation per Bash call.
