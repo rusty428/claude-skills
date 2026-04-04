@@ -2,7 +2,7 @@
 name: fix-dependabot
 description: Scan and fix Dependabot security alerts across all component repos in a project. Run from the project root (scaffold repo). Reads manifest.json for components, audits each, creates worktrees with fixes, and opens PRs.
 ---
-<!-- Version: 2026-04-04.4 -->
+<!-- Version: 2026-04-04.5 -->
 
 # Fix Dependabot Security Alerts
 
@@ -20,6 +20,8 @@ Scan all component repos in a project, fix vulnerable transitive dependencies, a
 **Never chain commands.** Each Bash call must be a single operation:
 - `cd` must be its own separate Bash call — never `cd /path && npm audit`
 - No `&&`, `;`, `||`, or pipes
+- No `--jq` flag on `gh api` — it counts as a pipe. Write raw JSON to `tmp/` and read with the Read tool.
+- Redirects (`>`) to write output files are OK
 - After `cd`, the working directory persists for subsequent Bash calls
 
 ## Phase 1 — Scan (GitHub API)
@@ -27,14 +29,11 @@ Scan all component repos in a project, fix vulnerable transitive dependencies, a
 Use the **Dependabot API** to get the authoritative list of open alerts. This reflects what GitHub sees, regardless of local lockfile state.
 
 1. Read `manifest.json` from the current directory
-2. For each component that has a `repo` field:
+2. For each component that has a `repo` field, fetch alerts to a temp file (do NOT use `--jq` — it triggers pipe-blocking hooks):
    ```bash
-   gh api repos/<owner>/<repo>/dependabot/alerts --jq '[.[] | select(.state=="open")] | length'
+   gh api repos/<owner>/<repo>/dependabot/alerts > <project-root>/tmp/<component>-alerts.json
    ```
-   Then get the details:
-   ```bash
-   gh api repos/<owner>/<repo>/dependabot/alerts --jq '[.[] | select(.state=="open") | {number, package: .dependency.package.name, severity: .security_advisory.severity, summary: .security_advisory.summary, fixAvailable: .security_update_available}]'
-   ```
+   Then read and parse the JSON file with the Read tool. Extract open alerts: number, package name, severity, summary, scope (dev/runtime), and whether a fix is available.
 3. Present a summary table per component:
 
    ```
@@ -71,6 +70,18 @@ git -C <component-path> worktree add ../../.worktrees/chore-dependabot/<componen
 ```
 
 If the branch already exists (from a previous run), use it instead of `-b`.
+
+After creating the worktree, `cd` into it and install dependencies:
+
+```bash
+cd .worktrees/chore-dependabot/<component-path>
+```
+
+```bash
+npm install
+```
+
+(Use `pnpm install` for pnpm components.) This ensures `node_modules` exists before audit or test steps.
 
 ### Step 2: Baseline test
 
@@ -220,7 +231,7 @@ Ask the user to run auth commands themselves — never attempt registry authenti
 1. **Always confirm** before creating worktrees or PRs
 2. **Never use `npm audit fix --force`** — major version bumps risk breaking changes
 3. **Stop on build/test failure** — do not push or PR broken code
-4. **npm only** — skip components without npm (report them)
+4. **npm and pnpm** — check `packageManager` in manifest. Use `npm audit fix` for npm, `pnpm audit --fix` + `pnpm add -D` overrides for pnpm
 5. **One branch per component** — `chore/dependabot-fixes`
 6. **No Co-Authored-By** in commit messages
 7. **Use Dependabot API for scanning** — `npm audit` for fixing. GitHub auto-closes alerts when the patched lockfile merges
