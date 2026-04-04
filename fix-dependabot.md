@@ -2,7 +2,7 @@
 name: fix-dependabot
 description: Scan and fix Dependabot security alerts across all component repos in a project. Run from the project root (scaffold repo). Reads manifest.json for components, audits each, creates worktrees with fixes, and opens PRs.
 ---
-<!-- Version: 2026-04-04.3 -->
+<!-- Version: 2026-04-04.4 -->
 
 # Fix Dependabot Security Alerts
 
@@ -22,27 +22,39 @@ Scan all component repos in a project, fix vulnerable transitive dependencies, a
 - No `&&`, `;`, `||`, or pipes
 - After `cd`, the working directory persists for subsequent Bash calls
 
-## Phase 1 — Scan
+## Phase 1 — Scan (GitHub API)
+
+Use the **Dependabot API** to get the authoritative list of open alerts. This reflects what GitHub sees, regardless of local lockfile state.
 
 1. Read `manifest.json` from the current directory
-2. For each component that has a local `path` directory:
-   - `cd` into the component directory (separate Bash call)
-   - Run `npm audit --json` (separate Bash call)
-   - If no root `package.json` exists, scan for nested `package.json` files (monorepo). Audit each subdirectory that has one — `cd` then `npm audit --json` separately for each.
-   - Parse the JSON output to extract: total alerts, severity counts, vulnerable packages
-3. Present a summary table:
+2. For each component that has a `repo` field:
+   ```bash
+   gh api repos/<owner>/<repo>/dependabot/alerts --jq '[.[] | select(.state=="open")] | length'
+   ```
+   Then get the details:
+   ```bash
+   gh api repos/<owner>/<repo>/dependabot/alerts --jq '[.[] | select(.state=="open") | {number, package: .dependency.package.name, severity: .security_advisory.severity, summary: .security_advisory.summary, fixAvailable: .security_update_available}]'
+   ```
+3. Present a summary table per component:
 
    ```
    Component          Alerts  Critical  High  Medium  Low
    project-infra         18         1     9       7    1
    project-web            5         0     2       3    0
    project-admin          0         —     —       —    —
+
+   project-infra alerts:
+     #12  handlebars       CRITICAL  Prototype pollution
+     #13  handlebars       HIGH      XSS
+     ...
    ```
 
 4. Skip components with zero alerts
 5. Ask: **"Fix all N components with alerts, or pick specific ones?"**
 
 Wait for confirmation before proceeding.
+
+**Why the API instead of `npm audit`:** Local `npm audit` reflects the current lockfile state — if a previous fix branch already patched the lockfile, `npm audit` shows zero alerts even though the PR hasn't merged and GitHub still shows them open. The API is the source of truth.
 
 ## Phase 2 — Fix (per selected component)
 
@@ -78,7 +90,11 @@ Working inside `.worktrees/chore-dependabot/<component-path>/`:
 npm audit fix
 ```
 
+For monorepos with nested `package.json` files, `cd` into each subdirectory and run `npm audit fix` separately.
+
 ### Step 4: Check remaining alerts
+
+Run `npm audit --json` locally to see what's resolved. Cross-reference with the Phase 1 API results to map fixes back to specific Dependabot alert numbers.
 
 ```bash
 npm audit --json
@@ -138,9 +154,9 @@ After a component passes build + test:
    git add package.json package-lock.json
    ```
 
-2. Commit — write the message to `/tmp/<project>-commit-msg.txt` using the Write tool, then commit with `--file`:
+2. Commit — write the message to `tmp/commit-msg.txt` (project root `tmp/` directory) using the Write tool, then commit with `--file`:
    ```bash
-   git commit --file /tmp/<project>-commit-msg.txt
+   git commit --file <project-root>/tmp/commit-msg.txt
    ```
    Message content:
    ```
@@ -155,9 +171,13 @@ After a component passes build + test:
    git push -u origin chore/dependabot-fixes
    ```
 
-4. Create PR via `gh pr create`:
+4. Create PR via `gh pr create` (write body to `tmp/pr-body.txt` first, use `--body-file`):
    - **Title:** `Fix Dependabot security alerts`
-   - **Body:** Summary of what was fixed — packages updated, overrides added, remaining alerts if any
+   - **Body:** Include:
+     - Summary of what was fixed
+     - List of Dependabot alert numbers resolved (e.g., "Resolves #12, #13, #14")
+     - Packages updated, overrides added
+     - Remaining alerts with reasons (if any)
    - Target repo is the component's GitHub repo from manifest
 
 5. Report the PR URL
@@ -203,4 +223,4 @@ Ask the user to run auth commands themselves — never attempt registry authenti
 4. **npm only** — skip components without npm (report them)
 5. **One branch per component** — `chore/dependabot-fixes`
 6. **No Co-Authored-By** in commit messages
-7. **No Dependabot API calls** — GitHub auto-closes alerts when the patched lockfile merges
+7. **Use Dependabot API for scanning** — `npm audit` for fixing. GitHub auto-closes alerts when the patched lockfile merges
