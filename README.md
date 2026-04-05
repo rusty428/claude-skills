@@ -36,6 +36,12 @@ Skills are markdown files with YAML frontmatter that Claude Code loads on demand
 | **noWeaselWords** | Apply precise writing standards — eliminate vague language, quantify claims |
 | **cleanitup** | Review and clean up any document to meet writing standards |
 
+### Code Review
+| Skill | Purpose |
+|-------|---------|
+| **adversarialReview** | Pre-PR last-look review using scored adversarial agents (Finder/Adversary/Referee) — surfaces logic errors, edge cases, and security blind spots in working code |
+| **reviewRepo** | Evaluate a third-party GitHub repo for adoption, extraction, or skipping |
+
 ### Workflow
 | Skill | Purpose |
 |-------|---------|
