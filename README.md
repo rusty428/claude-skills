@@ -42,6 +42,11 @@ Skills are markdown files with YAML frontmatter that Claude Code loads on demand
 | **adversarialReview** | Pre-PR last-look review using scored adversarial agents (Finder/Adversary/Referee) — surfaces logic errors, edge cases, and security blind spots in working code |
 | **reviewRepo** | Evaluate a third-party GitHub repo for adoption, extraction, or skipping |
 
+### Security
+| Skill | Purpose |
+|-------|---------|
+| **fix-dependabot** | Scan and fix Dependabot security alerts across all component repos — audits each, creates worktrees with fixes, and opens PRs |
+
 ### Workflow
 | Skill | Purpose |
 |-------|---------|
