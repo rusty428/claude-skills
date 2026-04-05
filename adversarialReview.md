@@ -54,8 +54,9 @@ Scan the diff for security-relevant patterns. Any match spawns the Security Find
 **Trigger patterns:**
 
 - **Auth/identity:** `auth`, `token`, `session`, `jwt`, `oauth`, `password`, `credential`, `login`, `signup`
-- **IAM/permissions:** `iam`, `policy`, `role`, `permission`, `principal`
+- **IAM/permissions:** `iam`, `policy`, `role`, `permission`, `allow`, `deny`, `principal`
 - **Data handling:** `encrypt`, `decrypt`, `hash`, `secret`, `api-key`, `apiKey`, `API_KEY`, `.env`
+- **Network/API:** `route`, `router`, `endpoint`, `handler`, `middleware`, `cors`, `lambda`, `CORS`
 - **Infrastructure:** `securityGroup`, `SecurityGroup`, `bucketPolicy`, `BucketPolicy`, `iamRole`, `IamRole`, `PolicyStatement`
 - **Database:** `query(`, `execute(`, `raw(`, `sql`, `SELECT`, `INSERT`, `UPDATE`, `DELETE`
 - **Dependency changes:** files named `package.json`, `package-lock.json`, `requirements.txt`, `Cargo.toml`, `go.mod`
