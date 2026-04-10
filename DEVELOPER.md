@@ -108,21 +108,12 @@ claude-skills/
 ├── README.md              # What this repo is, skill catalog, installation
 ├── DEVELOPER.md           # This file — how to add/modify skills
 ├── LICENSE                # MIT License
-├── cleanitup.md
-├── createImplementationPlan.md
-├── createLambda.md
-├── createQuickFix.md
-├── createSprintLog.md
-├── createTodo.md
-├── migrateDocumentation.md
-├── noWeaselWords.md
-├── reviewProject.md
-├── troubleshooting.md
-├── updateCdkDocs.md
-├── updateLambdaDocs.md
-├── updateProjectDocs.md
-├── weeklyAnalysis.md
-└── weeklyReport.md
+├── adversarialReview.md   # Active skill
+├── checkup.md             # Active skill
+├── fix-dependabot.md      # Active skill
+├── gitflow.md             # Active skill
+├── reviewRepo.md          # Active skill
+└── archived/              # Legacy skills — kept for reference, not maintained
 ```
 
 ## Testing Skills
@@ -134,4 +125,4 @@ claude-skills/
 5. Check generated files follow naming conventions and writing standards
 
 ---
-**Last Updated:** 2026-03-08
+**Last Updated:** 2026-04-10

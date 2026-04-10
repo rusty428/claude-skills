@@ -1,69 +1,34 @@
 # claude-skills
 
-A curated collection of Claude Code skills for software development workflows — task management, documentation generation, weekly reporting, code scaffolding, and writing standards.
+A curated collection of Claude Code skills for software development workflows — code review, security scanning, repo evaluation, and GitHub workflow automation.
 
 ## What Are Claude Code Skills?
 
-Skills are markdown files with YAML frontmatter that Claude Code loads on demand. Place them in your `.claude/commands/` directory, and they become available as slash commands (e.g., `/createTodo`). Skills standardize repeatable workflows so you get consistent, high-quality output every time.
+Skills are markdown files with YAML frontmatter that Claude Code loads on demand. Place them in your `.claude/commands/` directory, and they become available as slash commands (e.g., `/adversarialReview`). Skills standardize repeatable workflows so you get consistent, high-quality output every time.
 
-## Skills Included
+## Active Skills
 
-### Task Management
-| Skill | Purpose |
-|-------|---------|
-| **createTodo** | Create a structured task planning document before implementation |
-| **createQuickFix** | Document a minor bug fix with root cause analysis and code diffs |
-| **createImplementationPlan** | Write a detailed implementation plan with steps, testing strategy, and success criteria |
-| **createSprintLog** | Log completed work with summary, stakeholder highlights, and technical details |
-
-### Documentation
-| Skill | Purpose |
-|-------|---------|
-| **updateProjectDocs** | Generate or update project-level README.md and DEVELOPER.md from code analysis |
-| **updateCdkDocs** | Generate CDK infrastructure documentation from stack analysis |
-| **updateLambdaDocs** | Generate Lambda function documentation from handler and CDK analysis |
-| **migrateDocumentation** | Split a monolithic README into stakeholder README.md + technical DEVELOPER.md |
-
-### Weekly Reporting
-| Skill | Purpose |
-|-------|---------|
-| **weeklyAnalysis** | Scan and classify the week's development activity by impact level (HIGH/MEDIUM/LOW) |
-| **weeklyReport** | Create a stakeholder-ready weekly report from an approved analysis |
-
-### Writing & Quality
-| Skill | Purpose |
-|-------|---------|
-| **noWeaselWords** | Apply precise writing standards — eliminate vague language, quantify claims |
-| **cleanitup** | Review and clean up any document to meet writing standards |
-
-### Code Review
 | Skill | Purpose |
 |-------|---------|
 | **adversarialReview** | Pre-PR last-look review using scored adversarial agents (Finder/Adversary/Referee) — surfaces logic errors, edge cases, and security blind spots in working code |
+| **checkup** | Periodic health check of Claude Code setup — analyzes usage, config, and session history to surface dead weight, config friction, and missed features |
+| **fix-dependabot** | Scan and fix Dependabot security alerts across all component repos — audits each, creates worktrees with fixes, and opens PRs |
+| **gitflow** | Automate GitHub issue and PR workflow — create issues, suggest branches, ensure PRs reference issues |
 | **reviewRepo** | Evaluate a third-party GitHub repo for adoption, extraction, or skipping |
 
-### Security
-| Skill | Purpose |
-|-------|---------|
-| **fix-dependabot** | Scan and fix Dependabot security alerts across all component repos — audits each, creates worktrees with fixes, and opens PRs |
+## Archived Skills
 
-### Workflow
-| Skill | Purpose |
-|-------|---------|
-| **gitflow** | Automate GitHub issue and PR workflow — create issues, suggest branches, ensure PRs reference issues |
-| **troubleshooting** | Structured debugging protocol: observe, compare, collaborate, hypothesize, verify, implement |
-| **reviewProject** | Quick project context establishment at the start of a session |
-| **createLambda** | Scaffold a new Lambda function with handler + functions/ separation of concerns |
+Legacy skills from the original collection are in `archived/`. These were either superseded by [superpowers](https://github.com/anthropics/claude-code-plugins) plugins or never adopted into active use. They remain available for reference but are not maintained.
 
 ## Installation
 
 ### Download individual skills (recommended)
 
-Download the skills you want directly into your project's `.claude/commands/` directory:
+Download the skills you want directly into your `.claude/commands/` directory:
 
 ```bash
-mkdir -p .claude/commands
-curl -o .claude/commands/createTodo.md https://raw.githubusercontent.com/rusty428/claude-skills/main/createTodo.md
+mkdir -p ~/.claude/commands
+curl -o ~/.claude/commands/adversarialReview.md https://raw.githubusercontent.com/rusty428/claude-skills/main/adversarialReview.md
 ```
 
 Each `.md` file is self-contained — drop it in and it's available as a slash command.
@@ -74,7 +39,7 @@ Each `.md` file is self-contained — drop it in and it's available as a slash c
 git clone https://github.com/rusty428/claude-skills.git
 ```
 
-Then copy whichever skills you need into your project's `.claude/commands/` directory.
+Then copy whichever skills you need into your `.claude/commands/` directory.
 
 ## Skill Format
 
