@@ -61,16 +61,6 @@ Instructions that Claude follows when the skill is invoked.
 - **description**: Used for matching when Claude decides which skill applies
 - **Version comment**: Tracks when the skill was last updated (format: `YYYY-MM-DD.N` where N is the revision number for that date)
 
-## Writing Standards
-
-These skills enforce precise technical writing throughout all generated documentation:
-
-- **No weasel words** — vague qualifiers like "basically," "generally," "should" are eliminated
-- **Quantified claims** — words like "faster," "better," "significant" require specific measurements
-- **Active voice** — clear subject-verb-object structure showing who did what
-- **No hedge phrases** — "I think," "I believe," "in my opinion" are removed
-- **Substantiated benefits** — only claim improvements backed by evidence
-
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
